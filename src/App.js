@@ -179,7 +179,7 @@ function App() {
               )}
               {animationStep === 3 && (
                 <div className="text-[51px] text-center">
-                  mr frog
+                  frogman
                 </div>
               )}
             </>
@@ -204,12 +204,12 @@ function App() {
               {renderFrame()}
             </div>
             <div className='text-6xl'>
-              mr frog
+              frogman
               <div className='text-lg'>
                 (circa 2024)
               </div>
               <div className='text-base max-w-[300px]'>   
-                "mr frog" embodies the clashing between art and memes. we share this with you to be tokenized on 
+                "frogman" embodies the clashing between art and memes. we share this with you to be tokenized on 
                 Solana forever
               </div>
             </div>
@@ -221,7 +221,7 @@ function App() {
               </div>
             </div>
             <div className='text-6xl text-center'>
-              mr frog
+              frogman
               <div className='text-lg'>
                 (circa 2024)
               </div>
