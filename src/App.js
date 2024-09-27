@@ -227,7 +227,7 @@ function App() {
               </div>
             </div>
           </div>
-          <div className='absolute top-5 text-[10px] md:text-base'>CA: updating..</div>
+          <div className='absolute top-5 text-[10px] md:text-base'>CA: 54HoVwHxGZwd3XS6zdvu44xXpWp79FX6i87hu4HVpump</div>
           <div className="spotlight-overlay fade-in"></div>
           {fallingEmojis.map(emoji => (
             <div
