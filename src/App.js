@@ -8,9 +8,7 @@ function App() {
   const [emojiIndex, setEmojiIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [fallingEmojis, setFallingEmojis] = useState([]);
-  const [hideDonkey, setHideDonkey] = useState(false);
   const [audio] = useState(new Audio('https://ia902808.us.archive.org/26/items/ClairDeLunedebussy/2009-03-30-clairdelune.mp3'));
-  
 
   useEffect(() => {
     const handleResize = () => {
@@ -27,21 +25,28 @@ function App() {
     const img = new Image();
     img.onload = () => {
       const aspectRatio = img.width / img.height;
-      const maxHeight = window.innerHeight * 0.5;
-      const height = Math.min(maxHeight, img.height);
-      const width = height * aspectRatio;
+      const maxWidth = window.innerWidth * (isMobile ? 0.9 : 0.4);
+      const maxHeight = window.innerHeight * 0.7;
+      let width = maxWidth;
+      let height = width / aspectRatio;
+
+      if (height > maxHeight) {
+        height = maxHeight;
+        width = height * aspectRatio;
+      }
+
       setDimensions({ width, height });
     };
-    img.src = 'd.png';
-  }, []);
+    img.src = 'frog.png';
+  }, [isMobile]);
 
   useEffect(() => {
-    if (animationStep > 0 && animationStep <= 4) {
+    if (animationStep > 0 && animationStep <= 3) {
       const timer = setTimeout(() => {
         setAnimationStep(prev => prev + 1);
       }, 1700);
       return () => clearTimeout(timer);
-    } else if (animationStep > 4) {
+    } else if (animationStep > 3) {
       setOnLoadScreen(false);
     }
   }, [animationStep]);
@@ -56,7 +61,7 @@ function App() {
   useEffect(() => {
     if (!onLoadScreen) {
       const createFallingEmoji = () => {
-        const emojis = ['🦴', '🐶'];
+        const emojis = ['🐸', '☕'];
         const newEmoji = {
           id: Date.now(),
           emoji: emojis[Math.floor(Math.random() * emojis.length)],
@@ -83,31 +88,31 @@ function App() {
   };
 
   const playMusic = () => {
-    audio.currentTime = 0; // Start from the beginning
+    audio.currentTime = 0;
     audio.play().catch(error => {
       console.error('Audio playback error:', error);
     });
   };
 
   const renderFrame = () => (
-    <div className="relative scale-[75%] md:scale-100" style={{ width: `${dimensions.width}px`, height: `${dimensions.height}px` }}>
+    <div className="relative" style={{ width: `${dimensions.width}px`, height: `${dimensions.height}px` }}>
       {/* Outer frame */}
       <div className="absolute inset-0 bg-gradient-to-br from-yellow-600 via-yellow-500 to-yellow-600 rounded-lg shadow-2xl"></div>
 
       {/* Inner frame details */}
-      <div className="absolute inset-2 bg-gradient-to-br from-yellow-400 via-yellow-300 to-yellow-400 rounded-lg"></div>
-      <div className="absolute inset-4 bg-gradient-to-br from-yellow-600 via-yellow-500 to-yellow-600 rounded-lg"></div>
-      <div className="absolute inset-6 bg-gradient-to-br from-yellow-400 via-yellow-300 to-yellow-400 rounded-lg"></div>
+      <div className="absolute inset-1 bg-gradient-to-br from-yellow-400 via-yellow-300 to-yellow-400 rounded-lg"></div>
+      <div className="absolute inset-2 bg-gradient-to-br from-yellow-600 via-yellow-500 to-yellow-600 rounded-lg"></div>
+      <div className="absolute inset-3 bg-gradient-to-br from-yellow-400 via-yellow-300 to-yellow-400 rounded-lg"></div>
 
       {/* Ornate corner decorations */}
       {[
         "top-0 left-0", "top-0 right-0", "bottom-0 left-0", "bottom-0 right-0"
       ].map((position, index) => (
-        <div key={index} className={`absolute w-16 h-16 ${position}`}>
+        <div key={index} className={`absolute w-8 h-8 ${position}`}>
           <div className="absolute inset-0 bg-yellow-600 rounded-full transform rotate-45"></div>
-          <div className="absolute inset-1 bg-yellow-400 rounded-full transform rotate-45"></div>
-          <div className="absolute inset-2 bg-yellow-600 rounded-full transform rotate-45"></div>
-          <div className="absolute inset-3 bg-yellow-400 rounded-full"></div>
+          <div className="absolute inset-0.5 bg-yellow-400 rounded-full transform rotate-45"></div>
+          <div className="absolute inset-1 bg-yellow-600 rounded-full transform rotate-45"></div>
+          <div className="absolute inset-1.5 bg-yellow-400 rounded-full"></div>
         </div>
       ))}
 
@@ -118,17 +123,17 @@ function App() {
         "left-1/2 top-0 -translate-x-1/2 rotate-90",
         "left-1/2 bottom-0 -translate-x-1/2 rotate-90"
       ].map((position, index) => (
-        <div key={index} className={`absolute w-24 h-12 transform ${position}`}>
+        <div key={index} className={`absolute w-12 h-8 transform ${position}`}>
           <div className="absolute inset-0 bg-yellow-600 rounded-full"></div>
-          <div className="absolute inset-1 bg-yellow-400 rounded-full"></div>
-          <div className="absolute inset-2 bg-yellow-600 rounded-full"></div>
-          <div className="absolute inset-3 bg-yellow-400 rounded-full"></div>
+          <div className="absolute inset-0.5 bg-yellow-400 rounded-full"></div>
+          <div className="absolute inset-1 bg-yellow-600 rounded-full"></div>
+          <div className="absolute inset-1.5 bg-yellow-400 rounded-full"></div>
         </div>
       ))}
 
       {/* Image container */}
-      <div className="absolute inset-8 bg-white rounded-lg shadow-inner overflow-hidden">
-        <img src="dog.png" alt="Masterpiece Artwork" className="w-full h-full object-cover" />
+      <div className="absolute inset-4 bg-white rounded-lg shadow-inner overflow-hidden">
+        <img src="frog.png" alt="Masterpiece Artwork" className="w-full h-full object-cover" />
       </div>
 
       {/* Frame texture overlay */}
@@ -137,13 +142,13 @@ function App() {
   );
 
   return (
-    <div className={`h-[100vh] w-screen flex justify-center items-center ${onLoadScreen ? 'bg-black' : 'bg-white'} font-custom relative overflow-hidden`}>
+    <div className={`h-[100vh] w-screen flex justify-center items-center ${onLoadScreen ? 'bg-black' : 'bg-green-400'} font-custom relative overflow-hidden`}>
       {onLoadScreen ? (
         <div className={`flex flex-col items-center justify-center h-full ${onLoadScreen ? 'text-white' : 'text-black'}`}>
           {animationStep === 0 ? (
             <>
               <div className="text-6xl mb-4 space-x-2">
-                {['🦴', '🐶'].map((emoji, index) => (
+                {['🐸', '☕'].map((emoji, index) => (
                   <span
                     key={index}
                     role="button"
@@ -163,23 +168,18 @@ function App() {
           ) : (
             <>
               {animationStep === 1 && (
-                <div className="text-5xl text-center tracking-tight md:px-[20%]">
-                  From a Mastermind Artist
+                <div className="text-5xl text-center tracking-tight">
+                  we present to you
                 </div>
               )}
               {animationStep === 2 && (
-                <div className="text-5xl text-center tracking-tight">
-                  We Present to You
+                <div className="text-5xl text-center">
+                  a true masterpiece
                 </div>
               )}
               {animationStep === 3 && (
-                <div className="text-5xl text-center">
-                  A True Masterpiece
-                </div>
-              )}
-              {animationStep === 4 && (
                 <div className="text-[51px] text-center">
-                  dogcasso
+                  mr frog
                 </div>
               )}
             </>
@@ -188,14 +188,14 @@ function App() {
       ) : (
         <>
           <div className="absolute bottom-2 left-2 md:flex items-center space-x-2 bg-opacity-80 p-2 rounded-lg fade-in hidden">
-            <img src="dog.png" alt="Artist" className="size-14 rounded-full object-cover" />
-            <span className="text-base text-gray-800 font-semibold">• dogcasso</span>
+            <img src="frog.png" alt="Artist" className="size-14 rounded-full object-cover" />
+            <span className="text-base text-gray-800 font-semibold">• mr frog</span>
           </div>
           <div className='flex absolute bottom-4 right-4 md:bottom-7 md:right-7 space-x-2'>
-            <a href="https://x.com/dogcassocoin">
+            <a href="https://x.com/">
               Twitter
             </a>
-            <a href="https://t.me/dcassosol">
+            <a href="https://t.me/">
               Telegram
             </a>
           </div>
@@ -204,29 +204,30 @@ function App() {
               {renderFrame()}
             </div>
             <div className='text-6xl'>
-              dogcasso
+              mr frog
               <div className='text-lg'>
-                (circa 1969)
+                (circa 2024)
               </div>
               <div className='text-base max-w-[300px]'>   
-                "dogcasso" embodies the raw energy and unfiltered creativity of the canine spirit. This avant-garde piece showcases a dynamic composition of swirling colors and spontaneous brushstrokes, capturing the essence of a dog's exuberance. The painting's abstract form and vibrant hues create a whimsical yet profound exploration of artistic expression, celebrating the playful and imaginative nature of our furry companions.
+                "mr frog" embodies the clashing between art and memes. we share this with you to be tokenized on 
+                Solana forever
               </div>
             </div>
           </div>
           <div className='gap-1 md:hidden'>
-            <div className='flex justify-center'>
+            <div className='flex justify-center mb-4'>
               <div className="spin-in">
                 {renderFrame()}
               </div>
             </div>
             <div className='text-6xl text-center'>
-              DDCC
+              mr frog
               <div className='text-lg'>
-                (circa 1969)
+                (circa 2024)
               </div>
             </div>
           </div>
-          <div className='absolute top-5 text-[10px] md:text-base'>CA: 2aU1JtNBfyuz9YxGs2ExtWR3aXkPaKeinbBXZfT3pump</div>
+          <div className='absolute top-5 text-[10px] md:text-base'>CA: updating..</div>
           <div className="spotlight-overlay fade-in"></div>
           {fallingEmojis.map(emoji => (
             <div
